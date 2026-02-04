@@ -1,70 +1,61 @@
-# Getting Started with Create React App
+# Sistema de Gestión de Vehículos con OCR Visual
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este proyecto es una aplicación web moderna para la gestión de documentos de vehículos. Combina una interfaz visual interactiva con un potente backend de procesamiento OCR (Reconocimiento Óptico de Caracteres) para extraer datos automáticamente de permisos de circulación escaneados.
 
-## Available Scripts
+## 🚀 Requisitos Previos
 
-In the project directory, you can run:
+Antes de comenzar, asegúrate de tener instalado:
 
-### `npm start`
+1.  **Node.js**: Se recomienda la versión v20.12+ o v22.12+ (requisito de Vite).
+2.  **Python** (v3.8 o superior).
+3.  **Tesseract OCR**:
+    *   **Windows**: Instalar desde [UB-Mannheim/tesseract](https://github.com/UB-Mannheim/tesseract/wiki).
+        *   Ruta esperada: `C:\Program Files\Tesseract-OCR\tesseract.exe`
+    *   **Linux/Mac**: `sudo apt install tesseract-ocr`
+4.  **MySQL**: Base de datos corriendo en puerto 3306 (Opcional si solo pruebas el modo OCR).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## 🛠️ Instalación y Configuración
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+Sigue estos pasos para clonar y preparar el entorno de desarrollo:
 
-### `npm test`
+### 1. Clonar el repositorio
+```bash
+git clone https://github.com/tu-usuario/tu-repo.git
+cd tu-repo
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### 2. Instalar dependencias (Todo en uno)
+Hemos preparado un script que instala las dependencias del frontend, backend y librerías de Python automáticamente desde la raíz:
 
-### `npm run build`
+```bash
+npm run install:all
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+*Esto instalará `node_modules` en `/ocr-visual`, en `/server` y las librerías Python necesarias.*
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## ▶️ Ejecución en Desarrollo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Para iniciar la aplicación completa (Frontend + Backend) con un solo comando desde la raíz:
 
-### `npm run eject`
+```bash
+npm run dev
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Esto iniciará:
+- **Frontend (Vite/React)**: http://localhost:5173
+- **Backend (Express)**: http://localhost:3001
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### 🚗 Probar Modelo OCR
+1. Abre la aplicación en tu navegador.
+2. Haz clic en el botón **"PROBAR"** o navega a `/test-ocr`.
+3. Sube una imagen o PDF de un Permiso de Circulación.
+4. El sistema procesará el documento y mostrará los datos extraídos en tiempo real.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 📂 Estructura del Proyecto
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- **/ocr-visual**: Frontend moderno construido con React, Vite y TailwindCSS.
+- **/server**: API REST en Node.js + Express. Incluye el script `ocr_processor.py`.
+- **/database**: Scripts SQL.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+## ⚠️ Solución de Error de Versión Node.js
+Si al ejecutar recibes un error como "Vite requires Node.js version ...", por favor actualiza tu Node.js a la última versión estable (LTS) desde [nodejs.org](https://nodejs.org/).
