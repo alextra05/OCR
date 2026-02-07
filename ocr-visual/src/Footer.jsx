@@ -29,14 +29,16 @@ const Footer = () => {
                         {/* Socials Inline */}
                         <div className="flex gap-3 mt-1">
                             {[
-                                { name: 'Github', path: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22' },
-                                { name: 'LinkedIn', path: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z' }
+                                { name: 'Github', path: 'M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 00-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0020 4.77 5.07 5.07 0 0019.91 1S18.73.65 16 2.48a13.38 13.38 0 00-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 005 4.77a5.44 5.44 0 00-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 009 18.13V22', url: 'https://github.com/alextra05/OCR' },
+                                { name: 'LinkedIn', path: 'M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z', url: 'https://www.linkedin.com/in/alex-trapero-l%C3%B3pez-57132a339/' }
                             ].map((social, idx) => (
                                 <a
                                     key={idx}
-                                    href="#"
+                                    href={social.url}
                                     className="text-slate-500 hover:text-cyan-400 transition-colors"
                                     aria-label={social.name}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                 >
                                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                                         <path d={social.path} />
@@ -50,8 +52,8 @@ const Footer = () => {
                     {/* Contact Section (Right aligned) */}
                     <div className="flex flex-col items-center md:items-end gap-2 text-sm">
                         <h4 className="text-slate-200 font-medium text-xs uppercase tracking-wider mb-1">Contacto</h4>
-                        <a href="mailto:info@ocrvisual.com" className="text-slate-400 hover:text-cyan-400 transition-colors">
-                            info@ocrvisual.com
+                        <a href="mailto:traperolopezalex@gmail.com" className="text-slate-400 hover:text-cyan-400 transition-colors">
+                            traperolopezalex@gmail.com
                         </a>
                         <span className="text-slate-500 text-xs">Madrid, España</span>
 
