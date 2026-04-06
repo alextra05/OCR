@@ -1,11 +1,12 @@
 FROM python:3.10-slim
 
 # Instalamos dependencias del sistema, incluyendo Node.js
+# Cambiamos libgl1-mesa-glx por libgl1 para compatibilidad
 RUN apt-get update && apt-get install -y \
     curl \
     tesseract-ocr \
     libtesseract-dev \
-    libgl1-mesa-glx \
+    libgl1 \
     libglib2.0-0 \
     && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y nodejs \
@@ -14,12 +15,12 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Primero instalamos dependencias de Python para aprovechar la caché de Docker
+# Primero instalamos dependencias de Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Luego instalamos dependencias de Node.js
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
 
 # Copiamos todo el contenido de la carpeta server
