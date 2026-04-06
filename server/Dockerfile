@@ -1,7 +1,6 @@
 FROM python:3.10-slim
 
 # Instalamos dependencias del sistema, incluyendo Node.js
-# Cambiamos libgl1-mesa-glx por libgl1 para compatibilidad
 RUN apt-get update && apt-get install -y \
     curl \
     tesseract-ocr \
@@ -15,20 +14,19 @@ RUN apt-get update && apt-get install -y \
 
 WORKDIR /app
 
-# Primero instalamos dependencias de Python
+# Primero dependencias de Python
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Luego instalamos dependencias de Node.js
+# Luego dependencias de Node.js
 COPY package*.json ./
 RUN npm install
 
-# Copiamos todo el contenido de la carpeta server
+# Copiamos todo el contenido
 COPY . .
 
-# Exponemos el puerto
+# Puerto y arranque
 ENV PORT=3001
 EXPOSE 3001
 
-# Comando para arrancar el servidor Express
 CMD ["npm", "start"]
