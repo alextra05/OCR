@@ -112,8 +112,8 @@ const TestOcrPage = () => {
 
             console.log("--> CLICK DETECTADO. Enviando archivo:", file.name);
 
-            console.log("Enviando petición a https://ocr-ndl5.onrender.com/extract...");
-            const response = await fetch('https://ocr-ndl5.onrender.com/extract', {
+            console.log("Enviando petición a https://ocr-ndl5.onrender.com/api/process-pdf...");
+            const response = await fetch('https://ocr-ndl5.onrender.com/api/process-pdf', {
                 method: 'POST',
                 body: formData,
             });
