@@ -121,6 +121,9 @@ const TestOcrPage = () => {
             console.log("Respuesta status:", response.status);
 
             if (!response.ok) {
+                if (response.status === 502) {
+                    throw new Error('El motor OCR se está iniciando. Por favor, intenta de nuevo en unos segundos.');
+                }
                 const errorText = await response.text();
                 throw new Error(`Error del servidor (${response.status}): ${errorText}`);
             }
@@ -135,7 +138,12 @@ const TestOcrPage = () => {
             }
         } catch (err) {
             console.error("Error al procesar:", err);
-            setError(err.message || 'Error de conexión con el servidor. ¿Está encendido?');
+            
+            if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+                setError('El motor OCR se está iniciando. Por favor, espera unos segundos y vuelve a intentarlo.');
+            } else {
+                setError(err.message || 'Error de conexión con el servidor. ¿Está encendido?');
+            }
         } finally {
             setLoading(false);
         }
