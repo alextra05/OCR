@@ -73,7 +73,9 @@ async function ejecutarOCR(filePath) {
 if (!fs.existsSync(UPLOAD_DIR)) fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
 // ===== Middleware =====
-app.use(cors());
+app.use(cors({
+  origin: 'https://ocr-1vx9.vercel.app' // Tu URL de Vercel
+}));
 app.use(express.json());
 
 // Health Check
