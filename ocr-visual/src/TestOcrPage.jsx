@@ -104,34 +104,43 @@ const TestOcrPage = () => {
         setLoading(true);
         setError(null);
 
+        console.log("=== INICIO LABORATORIO LOGS ===");
+
         const formData = new FormData();
         // Clave requerida por el backend ('permiso')
         formData.append('permiso', file);
+        
+        console.log("Pre-vuelo: FormData inicializado");
+        console.log("- Clave: 'permiso'");
+        console.log("- Archivo:", formData.get('permiso')?.name || "N/A");
 
         try {
-            console.log("--> CLICK DETECTADO. Enviando archivo:", file.name);
-
             let url = 'https://ocr-ndl5.onrender.com/api/process-pdf';
-            console.log(`Enviando petición a ${url}...`);
+            console.log(`Pre-vuelo: URL principal destino -> ${url}`);
             
+            console.log("Estado: Enviando...");
+            console.log("Estado: Esperando respuesta...");
+            
+            console.time('ocr-timer');
             // Enviamos sin el Content-Type para que el navegador configure el boundary
             let response = await fetch(url, {
                 method: 'POST',
                 body: formData,
             });
 
-            console.log("Respuesta status:", response.status);
-
             // Prueba de respaldo en caso de 404 (Not Found)
             if (response.status === 404) {
                 console.warn(`Recibido 404 en ${url}, intentando ruta de respaldo sin /api...`);
                 url = 'https://ocr-ndl5.onrender.com/process-pdf';
+                console.log(`Pre-vuelo (Respaldo): URL destino -> ${url}`);
                 response = await fetch(url, {
                     method: 'POST',
                     body: formData,
                 });
-                console.log(`Respuesta status de respaldo (${url}):`, response.status);
             }
+            console.timeEnd('ocr-timer');
+
+            console.log("Respuesta status final:", response.status);
 
             if (!response.ok) {
                 if (response.status === 502) {
@@ -151,15 +160,33 @@ const TestOcrPage = () => {
                 setError(data.error || 'Error al procesar el archivo');
             }
         } catch (err) {
-            console.error("Error al procesar:", err);
+            // El timer pudo no haberse cerrado si falló catastróficamente
+            try { console.timeEnd('ocr-timer'); } catch (e) {}
+            
+            console.log("Estado: Error detectado");
+            console.error("=== ANATOMÍA DEL ERROR ===");
+            console.error("Mensaje de error:", err.message);
+            console.error("Stack trace:", err.stack);
+            console.log("Estado de red (navigator.onLine):", navigator.onLine);
+            
+            // Intento simple de llamar a la raíz para Health Check
+            console.log("Iniciando Health Check en la raíz del servidor...");
+            try {
+                const healthRes = await fetch('https://ocr-ndl5.onrender.com/');
+                console.log("Health Check terminad. Status:", healthRes.status);
+            } catch (healthErr) {
+                console.error("Fallo en Health Check (el servidor no responde a la petición más simple):", healthErr.message);
+            }
+            console.log("===============================");
             
             if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-                setError('El motor OCR se está iniciando. Por favor, espera unos segundos y vuelve a intentarlo.');
+                setError('El motor OCR está arrancando tras una pausa (Failed to fetch) o hay un problema de red. Revisa la consola.');
             } else {
                 setError(err.message || 'Error de conexión con el servidor. ¿Está encendido?');
             }
         } finally {
             setLoading(false);
+            console.log("=== FIN LABORATORIO LOGS ===");
         }
     };
 
