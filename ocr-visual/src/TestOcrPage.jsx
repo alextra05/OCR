@@ -105,20 +105,33 @@ const TestOcrPage = () => {
         setError(null);
 
         const formData = new FormData();
+        // Clave requerida por el backend ('permiso')
         formData.append('permiso', file);
 
         try {
-            // DEBUG: Alert eliminado
-
             console.log("--> CLICK DETECTADO. Enviando archivo:", file.name);
 
-            console.log("Enviando petición a https://ocr-ndl5.onrender.com/api/process-pdf...");
-            const response = await fetch('https://ocr-ndl5.onrender.com/api/process-pdf', {
+            let url = 'https://ocr-ndl5.onrender.com/api/process-pdf';
+            console.log(`Enviando petición a ${url}...`);
+            
+            // Enviamos sin el Content-Type para que el navegador configure el boundary
+            let response = await fetch(url, {
                 method: 'POST',
                 body: formData,
             });
 
             console.log("Respuesta status:", response.status);
+
+            // Prueba de respaldo en caso de 404 (Not Found)
+            if (response.status === 404) {
+                console.warn(`Recibido 404 en ${url}, intentando ruta de respaldo sin /api...`);
+                url = 'https://ocr-ndl5.onrender.com/process-pdf';
+                response = await fetch(url, {
+                    method: 'POST',
+                    body: formData,
+                });
+                console.log(`Respuesta status de respaldo (${url}):`, response.status);
+            }
 
             if (!response.ok) {
                 if (response.status === 502) {
@@ -131,8 +144,9 @@ const TestOcrPage = () => {
             const data = await response.json();
             console.log("Datos recibidos:", data);
 
-            if (data.success) {
-                setResult(data.data);
+            // Manejamos posible envoltorio {success, data} o la respuesta directa
+            if (data.success !== false) {
+                setResult(data.data || data);
             } else {
                 setError(data.error || 'Error al procesar el archivo');
             }
